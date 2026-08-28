@@ -1,0 +1,21 @@
+[Unit]
+Description=IA2 Peru authorized training lab
+After=network.target
+
+[Service]
+Type=simple
+User=ia2lab
+Group=ia2lab
+WorkingDirectory=/opt/ia2-peru
+EnvironmentFile=/etc/ia2-peru/ia2-peru.env
+ExecStart=/usr/bin/node /opt/ia2-peru/src/server.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/ia2-peru
+
+[Install]
+WantedBy=multi-user.target

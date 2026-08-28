@@ -1,0 +1,26 @@
+{
+  "name": "ia2-peru-secure-review-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Laboratorio autorizado de revision segura, DevSecOps y DAST para IA2 Peru.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.18.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "NODE_ENV=development LAB_MODE=true node src/server.js",
+    "test": "node --test test/*.test.js",
+    "sbom": "cyclonedx-npm --output-format JSON --output-file reports/sbom.cdx.json --validate",
+    "validate:secrets": "node scripts/validate-source-secrets.js"
+  },
+  "dependencies": {
+    "demo-payment-sdk": "file:vendor/demo-payment-sdk",
+    "express": "4.21.2",
+    "helmet": "8.1.0"
+  },
+  "devDependencies": {
+    "@cyclonedx/cyclonedx-npm": "6.0.1"
+  }
+}

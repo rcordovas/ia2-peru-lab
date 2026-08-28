@@ -1,0 +1,12 @@
+# Imagen de compatibilidad conservada para pruebas de regresion en QA.
+# No forma parte del despliegue Ubuntu/systemd descrito en este repositorio.
+FROM node:16.20.2-bullseye-slim
+WORKDIR /app
+COPY package*.json ./
+COPY vendor ./vendor
+RUN npm install --omit=dev --ignore-scripts --no-audit --no-fund
+COPY src ./src
+COPY public ./public
+ENV NODE_ENV=qa LAB_MODE=true PORT=3000
+EXPOSE 3000
+CMD ["node", "src/server.js"]

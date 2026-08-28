@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IA2 Peru - Laboratorio autorizado</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="brand">IA2 Peru</div>
+      <div class="subtitle">Fintech ficticia - laboratorio autorizado</div>
+    </div>
+    <span class="badge">DATOS SINTETICOS</span>
+  </header>
+
+  <main class="layout">
+    <section class="card" id="loginCard">
+      <h1>Acceso de laboratorio</h1>
+      <p>Use exclusivamente las credenciales de demostracion provistas.</p>
+      <form id="loginForm">
+        <label>Correo
+          <input id="email" value="demo@ia2-peru.local" autocomplete="username">
+        </label>
+        <label>Contrasena
+          <input id="password" type="password" value="Lab-IA2-2026!" autocomplete="current-password">
+        </label>
+        <button type="submit">Ingresar</button>
+      </form>
+      <pre id="loginStatus" class="status"></pre>
+    </section>
+
+    <section class="card hidden" id="transferCard">
+      <div class="card-header">
+        <div>
+          <h2>Nueva transferencia</h2>
+          <p>Limite visual del canal: 5,000 por operacion. Monedas: PEN o USD.</p>
+        </div>
+        <button id="refreshAccounts" class="secondary">Actualizar saldos</button>
+      </div>
+
+      <div id="accounts" class="accounts"></div>
+
+      <form id="transferForm">
+        <div class="grid">
+          <label>Cuenta origen
+            <select id="fromAccount"></select>
+          </label>
+          <label>Cuenta destino
+            <select id="toAccount"></select>
+          </label>
+          <label>Monto
+            <input id="amount" type="number" min="1" max="5000" step="0.01" value="100.00">
+          </label>
+          <label>Moneda
+            <select id="currency">
+              <option value="PEN">PEN</option>
+              <option value="USD">USD</option>
+            </select>
+          </label>
+          <label class="wide">Referencia
+            <input id="reference" maxlength="40" value="LAB-TRANSFER-001">
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" id="previewButton" class="secondary">Previsualizar</button>
+          <button type="submit">Transferir</button>
+        </div>
+      </form>
+      <pre id="transferStatus" class="status"></pre>
+    </section>
+
+    <section class="card notes">
+      <h2>Reglas del laboratorio</h2>
+      <p>Solo sobre esta instancia autorizada. No reutilice tecnicas contra sistemas de terceros. El objetivo es revisar controles, evidencia y decisiones de riesgo.</p>
+    </section>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IA2 Peru - EC2 Ubuntu para laboratorio autorizado de AppSec/DevSecOps.
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3.small
+    AllowedValues: [t3.micro, t3.small, t3.medium]
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC donde se creara el laboratorio.
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Subred publica con ruta a Internet Gateway para acceder por HTTP/SSH.
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: KeyPair existente para acceso administrativo al laboratorio.
+  AllowedSshCidr:
+    Type: String
+    Default: 0.0.0.0/32
+    Description: Reemplace por SU IP publica/32. No use 0.0.0.0/0.
+  AllowedHttpCidr:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: Para una clase cerrada, restrinja al rango de alumnos o proxy/WAF.
+  UbuntuAmi:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id
+
+Resources:
+  LabSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: IA2 Peru lab HTTP y SSH restringible
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref AllowedSshCidr
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref AllowedHttpCidr
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+
+  LabInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref UbuntuAmi
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: '0'
+          GroupSet:
+            - !Ref LabSecurityGroup
+          SubnetId: !Ref SubnetId
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 16
+            Encrypted: true
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: ia2-peru-appsec-lab
+        - Key: Environment
+          Value: training
+
+Outputs:
+  PublicIp:
+    Value: !GetAtt LabInstance.PublicIp
+  HealthUrl:
+    Value: !Sub 'http://${LabInstance.PublicDnsName}/api/health'
