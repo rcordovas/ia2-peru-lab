@@ -63,7 +63,7 @@ jobs:
       - name: Generate CycloneDX SBOM
         run: npm run sbom
       - name: Upload SCA and SBOM artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sca-sbom-reports
           path: |
@@ -89,7 +89,7 @@ jobs:
             --exit-code 0
       - name: Validate no unexpected token-like secrets outside lab fixture
         run: node scripts/validate-source-secrets.js
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: gitleaks-report
           path: reports/gitleaks.json
@@ -132,7 +132,7 @@ jobs:
         with:
           sarif_file: reports/trivy-container.sarif
           category: trivy-container
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: iac-container-reports
           path: reports/*.sarif
