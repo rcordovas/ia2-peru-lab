@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "demo-payment-sdk": "file:vendor/demo-payment-sdk",
-    "express": "4.21.2",
+    "express": "5.3.0",
     "helmet": "8.1.0"
   },
   "devDependencies": {
